@@ -36,7 +36,6 @@
     "build"
   ],
   "scripts": {
-    "prepare": "npm run build:production",
     "ava": "ava",
     "lint": "npm run lint:lib && npm run lint:demo && npm run lint:test",
     "lint:config": "eslint *.js",
@@ -49,7 +48,6 @@
     "deploy": "cpx demo/assets/** public/demo",
     "pretest": "npm run lint && npm run build:production",
     "test": "npm run ava",
-    "prepack": "npm test && inline-import",
     "postpublish": "inline-import -r"
   },
   "ava": {
