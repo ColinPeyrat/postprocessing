@@ -6,10 +6,29 @@ uniform vec2 range;
 
 varying vec2 vUv;
 
+float linearToWeightedLuminance( const in vec3 color ) {
+	// max out red component since we dont need it
+	vec3 weights = vec3( 1.0, 0.7152, 0.0722 );
+
+	// ignore red
+	float ratioRed = smoothstep(0.0, 0.99, color.r);
+	float ratioGreen = smoothstep(0.0, 0.99, color.g);
+	float ratioBlue = smoothstep(0.0, 0.99, color.b);
+
+	float ratio = ratioRed * ratioGreen * ratioBlue;
+
+	// invert the ratio
+	ratio = 1.0 - ratio;
+
+	float luminance = mix(0.0, dot( weights, color.rgb ), ratio);
+
+	return luminance;
+}
+
 void main() {
 
 	vec4 texel = texture2D(inputBuffer, vUv);
-	float l = linearToRelativeLuminance(texel.rgb);
+	float l = linearToWeightedLuminance(texel.rgb);
 
 	#ifdef RANGE
 
